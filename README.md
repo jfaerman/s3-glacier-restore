@@ -29,9 +29,11 @@ The project will be automatically compiled on the first run.
 
 ### Recursively restoring an S3 Path
 
+```
 ./s3-glacier-restore -r s3://bucket/prefixToRestore <expirationInDays>
+```
 
-### Contribute
+## Contribute
 
 Feel free to submit contributions via pull request.
 
