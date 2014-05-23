@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e #fast failure
+
+JAR_NAME="target/s3-glacier-restore-1.0-SNAPSHOT.jar"
+
+if [[ ! -f $JAR_NAME ]]; then
+    command -v mvn >/dev/null 2>&1 || { echo >&2 "Please install maven in order to compile project. Exiting."; exit 1; }
+    echo "- Jar not found. Compiling it.."
+    mvn package >/dev/null
+fi
+
+java -jar $JAR_NAME $@
