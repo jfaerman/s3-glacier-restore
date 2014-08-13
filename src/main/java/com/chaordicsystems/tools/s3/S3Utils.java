@@ -71,15 +71,15 @@ public class S3Utils {
         .withBucketName(baseS3Path.getBucketName())
         .withPrefix(baseS3Path.getObjectKey())
         .withMaxKeys(MAX_KEYS);
-        ObjectListing objectListing;
-
-        do {
+        ObjectListing objectListing = null;
+        String marker;
+        do {        	
             objectListing = s3client.listObjects(listObjectsRequest);
             for (S3ObjectSummary objectSummary :
-                objectListing.getObjectSummaries()) {
+                objectListing.getObjectSummaries()) {            	
                 S3Object s3Obj = new S3Object(objectSummary.getBucketName(), objectSummary.getKey());
                 System.out.println("Adding object to restore list ["+objectSummary.getBucketName()+"/"+objectSummary.getKey()+"]");
-                s3Obj.setStorageClass(objectSummary.getStorageClass());                
+                s3Obj.setStorageClass(objectSummary.getStorageClass());
                 result.add(s3Obj);
             }
             listObjectsRequest.setMarker(objectListing.getNextMarker());
