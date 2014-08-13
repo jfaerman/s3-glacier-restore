@@ -17,7 +17,8 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.google.common.base.Joiner;
 
 public class S3Utils {
-
+	static final int MAX_KEYS=1;
+			
     public static void restoreObject(S3Object s3Obj, Integer expirationInDays) {
         AmazonS3Client s3Client = new AmazonS3Client(new ProfileCredentialsProvider());
         try {
@@ -68,7 +69,8 @@ public class S3Utils {
 
         ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
         .withBucketName(baseS3Path.getBucketName())
-        .withPrefix(baseS3Path.getObjectKey());
+        .withPrefix(baseS3Path.getObjectKey())
+        .withMaxKeys(MAX_KEYS);
         ObjectListing objectListing;
 
         do {
@@ -76,8 +78,8 @@ public class S3Utils {
             for (S3ObjectSummary objectSummary :
                 objectListing.getObjectSummaries()) {
                 S3Object s3Obj = new S3Object(objectSummary.getBucketName(), objectSummary.getKey());
-                s3Obj.setStorageClass(objectSummary.getStorageClass());
-
+                System.out.println("Adding object to restore list ["+objectSummary.getBucketName()+"/"+objectSummary.getKey()+"]");
+                s3Obj.setStorageClass(objectSummary.getStorageClass());                
                 result.add(s3Obj);
             }
             listObjectsRequest.setMarker(objectListing.getNextMarker());
